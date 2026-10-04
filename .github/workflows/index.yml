@@ -1,0 +1,41 @@
+name: Update index.json
+
+# After a merge: rebuild the catalogue the app and the website read.
+on:
+  push:
+    branches: [main]
+    paths: ['**.yaml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: index
+  cancel-in-progress: false
+
+jobs:
+  index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get the checker
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/wlb-plugin-check" https://wealthlogbook.com/tools/wlb-plugin-check-linux-x86_64
+          chmod +x "$RUNNER_TEMP/wlb-plugin-check"
+
+      - name: Rebuild index.json
+        run: '"$RUNNER_TEMP/wlb-plugin-check" index . --out index.json'
+
+      - name: Commit if changed
+        run: |
+          git add index.json
+          if git diff --cached --quiet; then
+            echo "index.json unchanged"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Update index.json"
+            git push
+          fi

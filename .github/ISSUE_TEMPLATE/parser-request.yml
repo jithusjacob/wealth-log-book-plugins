@@ -1,0 +1,29 @@
+name: Parser request
+description: Ask for a plugin that reads a bank's or broker's statements
+labels: ["parser request"]
+body:
+  - type: markdown
+    attributes:
+      value: "**Never attach a statement or paste its contents**: they contain personal data. Describe the format instead."
+  - type: input
+    id: country
+    attributes: { label: Country, placeholder: India }
+    validations: { required: true }
+  - type: input
+    id: institution
+    attributes: { label: Bank or broker, placeholder: ICICI Bank }
+    validations: { required: true }
+  - type: input
+    id: statement
+    attributes: { label: Statement type, placeholder: Savings account, credit card, demat… }
+    validations: { required: true }
+  - type: dropdown
+    id: format
+    attributes: { label: File format, options: [PDF, CSV, Excel, Other] }
+    validations: { required: true }
+  - type: dropdown
+    id: email
+    attributes: { label: "Does the bank email the statement?", options: ["Yes, as an attachment", "No, I download it", "Not sure"] }
+  - type: textarea
+    id: notes
+    attributes: { label: Anything else, description: "Password-protected? Several accounts in one statement? No personal data, please." }

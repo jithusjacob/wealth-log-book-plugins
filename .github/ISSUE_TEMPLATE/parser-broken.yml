@@ -1,0 +1,20 @@
+name: Parser broken
+description: A plugin misreads or no longer reads a statement
+labels: ["parser broken"]
+body:
+  - type: markdown
+    attributes:
+      value: "**Never attach a statement or paste its contents.** Describe what goes wrong, using the app's preview (counts, which column) without real values."
+  - type: input
+    id: plugin
+    attributes: { label: Plugin file, placeholder: india/icici-bank/savings-account-parser.yaml }
+    validations: { required: true }
+  - type: input
+    id: version
+    attributes: { label: Plugin version, placeholder: "3" }
+  - type: textarea
+    id: problem
+    attributes:
+      label: What goes wrong
+      description: "e.g. 'rows after page 2 are unmatched', 'debits read as credits', 'dates fail since the September statement'"
+    validations: { required: true }
