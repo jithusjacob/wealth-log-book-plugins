@@ -1,0 +1,56 @@
+name: icici statement
+description: ICICI Bank Savings Account e-statement parser
+version: 9
+fileTypes: [pdf, csv, excel]
+
+dateFormats: ["%d-%m-%Y", "%B %d, %Y"]
+
+fields:
+  account_number: 'Statement of Transactions in Savings Account (\S+) in INR'
+  period: 'for the period ([A-Za-z]+ \d{2}, \d{4}) - ([A-Za-z]+ \d{2}, \d{4})'
+  statement_date: 'STATEMENT SUMMARY for Customer ID : \S+ as on ([A-Za-z]+ \d{2}, \d{4})'
+  account_balance: '(?m)^[ \t]*Savings A/c[ \t]+\S+[ \t]+([\d,]+\.\d{2})'
+
+openingBalance: 'B/F[ \t]+([\d,]+\.\d{2})'
+
+pdf:
+  start: '^[ \t]*\d{2}-\d{2}-\d{4}\b'
+  end:
+    - '^Total:[ \t]*'
+    - '^Page \d+ of \d+'
+    - '^Account Related Other Information[ \t]*$'
+  ignore:
+    - '^[ \t]*\d{2}-\d{2}-\d{4}[ \t]+B/F\b'
+    - '^[ \t]*Statement of Transactions in Savings Account\b'
+    - '^[ \t]*DATE MODE PARTICULARS DEPOSITS WITHDRAWALS BALANCE[ \t]*$'
+    - '^[ \t]*Page \d+ of \d+[ \t]*'
+    - '^[ \t]*Total:[ \t]*'
+  pattern: '^[ \t]*(?P<date>\d{2}-\d{2}-\d{4})[ \t]+(?P<description>.*?)[ \t]+(?P<amount>[\d,]+\.\d{2})[ \t]+(?P<balance>[\d,]+\.\d{2})[ \t]*$'
+
+table:
+  headerContains: [Date, Particulars]
+  columns:
+    date: Date
+    description: Particulars
+    debit: Withdrawals
+    credit: Deposits
+    balance: Balance
+
+sign: balance
+
+skip:
+  - '^Opening Balance$'
+
+balances:
+  pattern: '^[ \t]*(?P<description>(?:Savings A/c|Current A/c|PPF A/c)[ \t]+X*\d+|(?:FD[ \t]+)?\d{12})[ \t]+.*?(?P<balance>[\d,]+\.\d{2})[ \t]*(?:Registered|Not Registered)?[ \t]*$'
+  dateField: statement_date
+library:
+  country: India
+  institution: ICICI Bank
+  statementType: Savings Account
+  emailDomains:
+  - "@icici.bank.in"
+  author:
+    name: Anonymous
+  maintainer: jithusjacob
+  updated: "2026-10-11"
