@@ -1,4 +1,30 @@
 {
   "format": 1,
-  "plugins": []
+  "plugins": [
+    {
+      "path": "india/icici-bank/savings-account-parser.yaml",
+      "kind": "parser",
+      "name": "icici statement",
+      "description": "ICICI Bank Savings Account e-statement parser",
+      "version": 9,
+      "country": "India",
+      "institution": "ICICI Bank",
+      "statementType": "Savings Account",
+      "fileTypes": [
+        "pdf",
+        "csv",
+        "excel"
+      ],
+      "emailDomains": [
+        "@icici.bank.in"
+      ],
+      "author": {
+        "name": "Anonymous"
+      },
+      "maintainer": "jithusjacob",
+      "updated": "2026-10-11",
+      "sha256": "2731255d5b011c2a99844a92b81f18092c40548d21f9575012cd494a6f709f1f",
+      "size": 1717
+    }
+  ]
 }
